@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.crosschecker_app.bucket_regional_domain_name
+    domain_name = aws_s3_bucket.static_app_bucket.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.static_app_bucket.id
   }
 
@@ -57,7 +57,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     path_pattern     = "/content/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    target_origin_id = aws_s3_bucket.static_app_bucket.id
 
     forwarded_values {
       query_string = false
