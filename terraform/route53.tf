@@ -31,11 +31,11 @@ resource "aws_route53_record" "cloudfront_alias" {
   }
 }
 
-# resource "aws_route53_record" "apigateway_cname" {
-#   zone_id = aws_route53_zone.primary.zone_id
-#   name = "api.crosschecker.app"
-#   type = "CNAME"
-#   ttl = "300"
+resource "aws_route53_record" "apigateway_cname" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name = "api.${var.domain}"
+  type = "CNAME"
+  ttl = "300"
   
-#   records = [aws_apigatewayv2_domain_name.image_uploader_signature_api.domain_name_configuration[0].target_domain_name]
-# }
+  records = [aws_apigatewayv2_domain_name.app_api_domain.domain_name_configuration[0].target_domain_name]
+}
