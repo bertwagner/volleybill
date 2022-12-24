@@ -2,9 +2,6 @@
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "${var.domain}-state"
 
-  tags = {
-    project = "${var.domain}"
-  }
 }
 
 resource "aws_s3_bucket_acl" "terraform_state" {
@@ -24,9 +21,6 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
 resource "aws_s3_bucket" "static_app_bucket" {
   bucket = "${var.domain}"
 
-  tags = {
-    project = "${var.domain}"
-  }
 }
 
 resource "aws_s3_bucket_policy" "static_app_bucket" {
@@ -73,8 +67,13 @@ resource "aws_s3_bucket_website_configuration" "static_app_bucket" {
 # }
 
 
-# # Lambda source code
-# resource "aws_s3_bucket" "lambda_functions" {
-#   bucket = "crosschecker.app-lambda-functions"
-#   acl = "private"
-# }
+# Lambda source code
+resource "aws_s3_bucket" "lambda_functions" {
+  bucket = "${var.domain}-lambda-functions"
+}
+
+resource "aws_s3_bucket_acl" "lambda_bfunctions_acl" {
+  bucket = aws_s3_bucket.lambda_functions.id
+  acl = "private"
+
+}
