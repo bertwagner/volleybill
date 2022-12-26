@@ -17,7 +17,7 @@ resource "aws_apigatewayv2_integration" "insert_game_integration" {
 
 resource "aws_apigatewayv2_route" "insert_game_api" {
   api_id    = aws_apigatewayv2_api.app_api.id
-  route_key = "GET /insert-game"
+  route_key = "POST /insert-game"
   target = "integrations/${aws_apigatewayv2_integration.insert_game_integration.id}"
 }
 
