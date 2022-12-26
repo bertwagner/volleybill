@@ -9,6 +9,34 @@
   <title>VolleyBill</title>
   <link rel="stylesheet" href="css/tabler.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .team-grouping {
+      border: 1px dashed gainsboro;
+      min-height: 73px;
+    }
+
+    /* remove drop down arrow from select */
+    select.form-control {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* make the preprended W:/L: groups the same width */
+    .input-group>.input-group-prepend {
+      width: 80px;
+    }
+
+    .input-group .input-group-text {
+      width: 100%;
+    }
+
+    /* make the add player button smaller */
+    button#AddPlayer {
+      padding: 0 .25rem;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -40,7 +68,7 @@
           <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="./#">
+                <a class="nav-link" href="./games.html">
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-123" width="24"
@@ -55,7 +83,7 @@
                     </svg>
                   </span>
                   <span class="nav-link-title">
-                    Scores
+                    Games
                   </span>
                 </a>
               </li>
@@ -115,13 +143,93 @@
         <div class="container-xl">
 
           <div class="row row-cards">
- 
-        </div>
+
+            <form>
+              <div class="row">
+                <div class="col">
+                  <label for="GameDate">Game Date</label>
+                  <input type="date" class="form-control" name="GameDate" id="GameDate" aria-describedby="GameDate">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <label for="Team1">Scores</label>
+                  <div class="row no-gutters">
+                    <div class="col">
+                      <label class="sr-only" for="Team1Wins"></label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text form-control-sm">Team 1:</div>
+                        </div>
+                        <input class="form-control form-control-sm score-selector" name="Team1Score" type="tel"
+                          name="Team1Score" />
+                      </div>
+                    </div>
+                    <div class="col">
+                      <label class="sr-only" for="Team1Losses"></label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text form-control-sm">Team 2:</div>
+                        </div>
+                        <input class="form-control form-control-sm score-selector" name="Team2Score" type="tel"
+                          id="Team2Score" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row my-2">
+                    <div class="col team-grouping mx-3 p-3" id="team-grouping-1">
+
+                    </div>
+                    <div class="col team-grouping mx-3 p-3" id="team-grouping-2">
+
+                    </div>
+                  </div>
+                </div>
+
+                <input type="hidden" name="SerializedTeams" id="SerializedTeams" />
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <label for="PlayerPool">Bench ( <a href="#" id="AddPlayer">+</a> )</label>
+                  <div class="row form-group d-none no-gutters" id="AddPlayerForm">
+                    <div class="col-sm-3">
+                      <label for="AddPlayerName" class="sr-only">Player Name</label>
+                      <input type="text" class="form-control form-control-sm" id="AddPlayerName"
+                        aria-describedby="AddPlayerName" validation="^(\w|\.)+$">
+                    </div>
+                    <div class="col-sm-1 mx-2">
+                      <button type="button" id="AddPlayerToPool" class="btn btn-primary btn-sm">
+                        Add
+                      </button>
+                    </div>
+                    <div class="col-sm-8">
+
+                    </div>
+                  </div>
+                  <div class="col team-grouping p-3" id="PlayerPool">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <div class="col">
+                  <button type="button" class="btn btn-primary" id="save">Save</button>
+                </div>
+              </div>
+            </form>
+
+            <pre id="results" />
+
+          </div>
         </div>
       </div>
     </div>
   </div>
   <script src="scripts/tabler.min.js"></script>
+  <script src="scripts/ajax.min.js"></script>
+  <script src="scripts/dragdroptouch.js"></script>
   <script src="scripts/add_game.js"></script>
 </body>
 
