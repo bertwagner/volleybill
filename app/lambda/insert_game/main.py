@@ -1,30 +1,38 @@
 import boto3
+from botocore.exceptions import ClientError
 import json
 import datetime
 
 def lambda_handler(event, context):
-    data=json.loads(event['body'])
+    tableData=json.loads(event['body'])
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('Game')
 
     insertDate = datetime.datetime.utcnow().isoformat()
     
-    table.put_item(
-        Item={
-                'GameId': f"{data['Date']}_{data['Game']}",
-                'Player': data['Player'],
-                'Date': data['Date'],
-                'Season': data['Season'],
-                'Team': data['Team'],
-                'Game': data['Game'],
-                'Points': data['Points'],
-                'InsertDate': insertDate
-            },
-        ConditionExpression='attribute_not_exists(GameId) AND attribute_not_exists(Player)'
-            
-        )
-
+    for rowData in tableData:
+        try:
+            table.put_item(
+            Item={
+                    'GameId': f"{rowData['Date']}_{rowData['Game']}",
+                    'Player': rowData['Player'],
+                    'Date': rowData['Date'],
+                    'Season': rowData['Season'],
+                    'Team': rowData['Team'],
+                    'Game': rowData['Game'],
+                    'Points': rowData['Points'],
+                    'InsertDate': insertDate
+                },
+            ConditionExpression='attribute_not_exists(GameId) AND attribute_not_exists(Player)'   
+            )
+        except ClientError  as e:
+            print(e.response['Error']['Message'])
+            return {
+                "statusCode": 500,
+                'headers': { 'Content-Type': 'application/json' },
+                "body": json.dumps(e.response['Error'])
+            }
     return {
         "statusCode": 200,
         'headers': { 'Content-Type': 'application/json' },

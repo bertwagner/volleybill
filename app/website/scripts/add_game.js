@@ -1,6 +1,7 @@
 ///
 /// Variables
 ///
+var gameId;
 
 ///
 /// Methods
@@ -19,6 +20,16 @@ var serializeTeams = function () {
     var teams = { "Team1Players": Array.from(team1).map(x => x.id), "Team2Players": Array.from(team2).map(x => x.id) };
     document.querySelector("#SerializedTeams").value = JSON.stringify(teams);
 }
+
+var generateUUID = function() {
+    return self.crypto.randomUUID();
+}
+
+function isNumeric(str) {
+    if (typeof str != "string") return false 
+    return !isNaN(str) && 
+           !isNaN(parseFloat(str)) 
+  }
 
 // Define drag and drop actions
 var handleDragStart = function (e) {
@@ -103,9 +114,13 @@ window.addEventListener('click', function (e) {
     }
 
     if (e.target.id == "save") {
-
+        serializeTeams();
         // disable the save button
         e.target.disabled = true;
+        //hide save button
+        e.target.classList.add('hidden');
+        //show spinner
+        document.getElementById("loadingImage").classList.remove('hidden');
 
         // Get fields
         var gameDate = document.querySelector("#GameDate").value;
@@ -114,59 +129,72 @@ window.addEventListener('click', function (e) {
         var team1Players = JSON.parse(document.querySelector("#SerializedTeams").value).Team1Players;
         var team2Players = JSON.parse(document.querySelector("#SerializedTeams").value).Team2Players;
 
+        // Basic clientside validation
+        if (team1Score == "" || team2Score == "" || !isNumeric(team1Score) || !isNumeric(team2Score)) {
+            alert('Must have non-blank numeric scores');
+            e.target.disabled = false;
+            e.target.classList.remove('hidden');
+            document.getElementById("loadingImage").classList.add('hidden');
+        }
+        else if (team1Players.length == 0 || team2Players.length==0) {
+            alert('Must have at least 1 player selected for each team.');
+            e.target.disabled = false;
+            e.target.classList.remove('hidden');
+            document.getElementById("loadingImage").classList.add('hidden');
+        }
+        else {
+            var dataToSave = [];
 
-        var gameId = self.crypto.randomUUID();
+            for (var i = 0; i < team1Players.length; i++) {
+                var parms = {
+                    "Season": 1,
+                    "Player": team1Players[i],
+                    "Date": gameDate,
+                    "Team": 1,
+                    "Game": gameId,
+                    "Points": team1Score
+                };
+                dataToSave.push(parms);
+            }
+            for (var j = 0; j < team2Players.length; j++) {
 
-        for (var i = 0; i < team1Players.length; i++) {
-            var parms = {
-                "Season": 1,
-                "Player": team1Players[i],
-                "Date": gameDate,
-                "Team": 1,
-                "Game": gameId,
-                "Points": team1Score
+                var parms = {
+                    "Season": 1,
+                    "Player": team2Players[j],
+                    "Date": gameDate,
+                    "Team": 2,
+                    "Game": gameId,
+                    "Points": team2Score
+                };
+                dataToSave.push(parms);
             };
-
+            
             fetch('https://api.volleybill.com/insert-game', {
                 method: 'post',
-                body: JSON.stringify(parms)
+                body: JSON.stringify(dataToSave)
             })
-            .then(function (response) {
+            .then(function(response) {
                 if (response.ok) {
                     return response;
-                  }
-            
-                  alert('error with team1');
-                  return Promise.reject(response);
-                }).then(function (response) {
-
-                    for (var j = 0; j < team2Players.length; j++) {
-
-                        var parms = {
-                            "Season": 1,
-                            "Player": team2Players[j],
-                            "Date": gameDate,
-                            "Team": 2,
-                            "Game": gameId,
-                            "Points": team2Score
-                        };
-                        fetch('https://api.volleybill.com/insert-game', {
-                            method: 'post',
-                            body: JSON.stringify(parms)
-                        }).then(function(response) {
-                            if (response.ok) {
-                                return response;
-                                }
-                        
-                            alert('error with team 2');
-                            return Promise.reject(response);
-
-                        })
                     }
+            
+                alert('Error while saving data.');
+                return Promise.reject(response);
 
             })
+            .then((data) => {
+                //success. reset form
+                gameId=generateUUID();
+                document.querySelector("#Team1Score").value='';
+                document.querySelector("#Team2Score").value='';
+                document.querySelector("#SerializedTeams").value = '';
+            })
+            .finally(function() {
+                e.target.disabled = false;
+                e.target.classList.remove('hidden');
+                document.getElementById("loadingImage").classList.add('hidden');
+            });
         }
-
     }
 
 }, true);
@@ -177,6 +205,9 @@ window.addEventListener('click', function (e) {
 
 // Set the default Game Date
 document.querySelector("#GameDate").value = new Date().toDateInputValue();
+
+// Set a unique id for this game
+gameId = generateUUID();
 
 // Populate dropdowns and the bench
 // ajax()
