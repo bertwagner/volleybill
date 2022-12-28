@@ -16,7 +16,9 @@ def lambda_handler(event, context):
                 'Team': data['Team'],
                 'Game': data['Game'],
                 'Points': data['Points']
-            }
+            },
+        ConditionExpression='attribute_not_exists(GameId) AND attribute_not_exists(Player)'
+            
         )
 
     return {
