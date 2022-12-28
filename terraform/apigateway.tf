@@ -2,7 +2,7 @@ resource "aws_apigatewayv2_api" "app_api" {
   name          = "${var.domain}-api"
   protocol_type = "HTTP"
   cors_configuration {
-    allow_origins = ["https://${var.domain}"]
+    allow_origins = ["https://${var.domain}","https://api.${var.domain}"]
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_apigatewayv2_stage" "app_api_stage" {
 
   access_log_settings {
      destination_arn = aws_cloudwatch_log_group.apigateway.arn
-     format = "{ \"requestId\":\"$context.requestId\",\"extendedRequestId\":\"$context.extendedRequestId\",\"ip\": \"$context.identity.sourceIp\",\"caller\":\"$context.identity.caller\",\"user\":\"$context.identity.user\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\" }"
+     format = "{ \"requestId\":\"$context.requestId\",\"extendedRequestId\":\"$context.extendedRequestId\",\"ip\": \"$context.identity.sourceIp\",\"caller\":\"$context.identity.caller\",\"user\":\"$context.identity.user\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\", \"responseLength\":\"$context.responseLength\",\"integrationErrorMessage\":\"$context.integrationErrorMessage\" }"
   }
 }
 

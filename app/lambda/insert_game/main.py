@@ -1,35 +1,26 @@
 import boto3
+import json
 
 def lambda_handler(event, context):
+    data=json.loads(event['body'])
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('Game')
-
+    
     table.put_item(
         Item={
-                'GameId': f"{event['Date']}_{event['Game']}",
-                'Player': event['Player'],
-                'Date': event['Date'],
-                'Season': event['Season'],
-                'Team': event['Team'],
-                'Game': event['Game'],
-                'Points': event['Points']
+                'GameId': f"{data['Date']}_{data['Game']}",
+                'Player': data['Player'],
+                'Date': data['Date'],
+                'Season': data['Season'],
+                'Team': data['Team'],
+                'Game': data['Game'],
+                'Points': data['Points']
             }
         )
 
     return {
         "statusCode": 200,
         'headers': { 'Content-Type': 'application/json' },
-        "body": {}
+        "body": ""
     }
-
-
-test_data = {
-    "Date": "2022-12-07",
-    "Player": "Jeremy",
-    "Season": 1,
-    "Team": 1,
-    "Game": 1,
-    "Points": 21
-}
-lambda_handler(test_data,None)
