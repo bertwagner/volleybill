@@ -9,3 +9,6 @@ lambdas:
 	zip -rj app/lambda/insert_game.zip app/lambda/insert_game
 	aws s3 cp app/lambda/insert_game.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-insert-game --s3-bucket volleybill.com-lambda-functions --s3-key insert_game.zip > /dev/null
+	zip -rj app/lambda/summarize_game.zip app/lambda/summarize_game
+	aws s3 cp app/lambda/summarize_game.zip s3://volleybill.com-lambda-functions
+	aws lambda update-function-code --function-name volleybill-summarize-game --s3-bucket volleybill.com-lambda-functions --s3-key summarize_game.zip > /dev/null

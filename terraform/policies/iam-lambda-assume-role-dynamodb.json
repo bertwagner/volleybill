@@ -1,0 +1,30 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Resource": "arn:aws:logs:*:*:*",
+          "Effect": "Allow"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [ "dynamodb:BatchGetItem",
+                      "dynamodb:GetItem",
+                      "dynamodb:PutItem",
+                      "dynamodb:GetRecords",
+                      "dynamodb:Scan",
+                      "dynamodb:Query",
+                      "dynamodb:GetShardIterator",
+                      "dynamodb:DescribeStream",
+                      "dynamodb:ListStreams" ],
+          "Resource": [
+            "${GAME_TABLE_ARN}",
+            "${GAME_TABLE_ARN}/*"
+          ]
+      }
+    ]
+  }
