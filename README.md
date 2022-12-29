@@ -2,6 +2,12 @@
 
 A set of serverless apps to manage scores and payments for pickup volleyball leagues.
 
+The goal was to build a dynamic, secure application as cheaply as possible on AWS.
+
+## Architecture
+
+![Architecture Diagram](VolleyBillDiagram.png)
+
 ## Setup
 ### Building infrastructure
 1. Modify any configuration variable values in `terraform/backend.conf` and `terraform/terraform.tfvars`.
