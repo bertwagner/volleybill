@@ -143,30 +143,13 @@ window.addEventListener('click', function (e) {
             document.getElementById("loadingImage").classList.add('hidden');
         }
         else {
-            var dataToSave = [];
-
-            for (var i = 0; i < team1Players.length; i++) {
-                var parms = {
-                    "Season": 1,
-                    "Player": team1Players[i],
-                    "Date": gameDate,
-                    "Team": 1,
-                    "Game": gameId,
-                    "Points": team1Score
-                };
-                dataToSave.push(parms);
-            }
-            for (var j = 0; j < team2Players.length; j++) {
-
-                var parms = {
-                    "Season": 1,
-                    "Player": team2Players[j],
-                    "Date": gameDate,
-                    "Team": 2,
-                    "Game": gameId,
-                    "Points": team2Score
-                };
-                dataToSave.push(parms);
+            var dataToSave = {
+                "League": 1,
+                "Season": 3,
+                "Date": gameDate,
+                "Game": gameId,
+                "Teams": [team1Players,team2Players],
+                "Scores": [team1Score,team2Score],
             };
             
             fetch('https://api.volleybill.com/insert-game', {
