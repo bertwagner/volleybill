@@ -1,4 +1,4 @@
-# VolleyBill
+# VolleyBill.com
 
 A set of serverless apps to manage scores and payments for pickup volleyball leagues.
 
