@@ -22,8 +22,7 @@
                       "dynamodb:DescribeStream",
                       "dynamodb:ListStreams" ],
           "Resource": [
-            "${GAME_TABLE_ARN}",
-            "${GAME_TABLE_ARN}/*"
+            "${BASE_ARN}/*"
           ]
       }
     ]

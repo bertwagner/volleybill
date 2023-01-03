@@ -19,7 +19,7 @@ resource "aws_iam_role" "lambda_assume_role_dynamodb" {
 
 resource "aws_iam_policy" "lambda_assume_role_dynamodb" {
   name = "${var.app_name}-lambda-assume-role-dynamodb"
-  policy = templatefile("policies/iam-lambda-assume-role-dynamodb.json", { GAME_TABLE_ARN = aws_dynamodb_table.game_table.arn})
+  policy = templatefile("policies/iam-lambda-assume-role-dynamodb.json", { BASE_ARN = "arn:aws:dynamodb:us-east-1:756669507085:table"})
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_assume_role_dynamodb" {
