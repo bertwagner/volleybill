@@ -39,3 +39,21 @@ resource "aws_dynamodb_table" "playersummary_table" {
   }
 
 }
+
+resource "aws_dynamodb_table" "playergame_table" {
+  name           = "PlayerGame"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "League_Season_Player"
+  range_key      = "PlayDate"
+
+  attribute {
+    name = "League_Season_Player"
+    type = "S"
+  }
+
+  attribute {
+    name = "PlayDate"
+    type = "S"
+  }
+
+}
