@@ -32,6 +32,15 @@ def lambda_handler(event, context):
             'headers': { 'Content-Type': 'application/json' },
             "body": json.dumps(e.response['Error'])
         }
+    
+    for team in gameData['Teams']:
+        for player in team:
+            dynamodb.Table('PlayerGame').put_item(
+                Item={
+                    'League_Season_Player': f"{gameData['League']}_{gameData['Season']}_{player}",
+                    'PlayDate': gameData['Date']
+                }
+            )
 
     return {
         "statusCode": 200,
