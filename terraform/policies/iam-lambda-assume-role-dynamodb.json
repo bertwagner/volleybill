@@ -13,7 +13,7 @@
         {
           "Effect": "Allow",
           "Action": [ "dynamodb:BatchGetItem",
-                      "dynamodb:BatchWriteItem",
+                      "dynamodb:UpdateItem",
                       "dynamodb:GetItem",
                       "dynamodb:PutItem",
                       "dynamodb:GetRecords",
