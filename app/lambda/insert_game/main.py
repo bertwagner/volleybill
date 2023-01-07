@@ -2,18 +2,8 @@ import boto3
 import json
 import datetime
 
-
-def lambda_handler(event, context):
-    gameData = json.loads(event['body'])
-
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('VolleyBill')
-
-    insertDate = datetime.datetime.utcnow().isoformat()
-
-    # calculate game and match wins/losses stats
+def calculate_stats(gameData):
     playerStats = {}
-
     for player in gameData['Teams'][0]:
         if gameData['Scores'][0] > gameData['Scores'][1]:
             gamesWon = 1
@@ -44,6 +34,18 @@ def lambda_handler(event, context):
 
         playerStats[player] = stats
 
+    return playerStats
+
+def lambda_handler(event, context):
+    gameData = json.loads(event['body'])
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('VolleyBill')
+
+    insertDate = datetime.datetime.utcnow().isoformat()
+
+    playerStats = calculate_stats(gameData)
+
     for team in gameData['Teams']:
         for player in team:
             table.put_item(
@@ -62,8 +64,8 @@ def lambda_handler(event, context):
             )
             table.update_item(
                 Key={
-                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}_player#{player}",
-                    'SK': f"stats"
+                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
+                    'SK': f"stats_player#{player}"
                 },
                 UpdateExpression='SET GamesWon = if_not_exists(GamesWon,:z) + :gw, GamesLost = if_not_exists(GamesLost,:z) + :gl, TotalGamesPlayed = if_not_exists(TotalGamesPlayed,:z) + :tgp, UpdateDate = :ud',
                 ExpressionAttributeValues={
