@@ -1,10 +1,13 @@
 import boto3
-from dynamodb_json import json_util as json
+import json 
+from decimal import Decimal
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal): return float(obj)
 
 def lambda_handler(event, context):
     gameData = event['queryStringParameters']
-    print(gameData['league'])
-    print(gameData['season'])
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('VolleyBill')
@@ -17,12 +20,11 @@ def lambda_handler(event, context):
         }
     )
 
-    print(response['Items'])
-    print(json.dumps(response['Items']))
-
+    #results = dynamodb_items_to_json(response['Items'])
+    results = json.dumps(response['Items'], cls=DecimalEncoder)
 
     return {
         "statusCode": 200,
         'headers': {'Content-Type': 'application/json'},
-        "body": json.dumps(response['Items'])
+        "body": results
     }
