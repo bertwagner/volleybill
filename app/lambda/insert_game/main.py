@@ -48,27 +48,28 @@ def lambda_handler(event, context):
 
     for team in gameData['Teams']:
         for player in team:
-            table.put_item(
-                Item={
-                    'PK': f"player#{player}",
-                    'SK': f"league#{gameData['League']}_season#{gameData['Season']}",
-                    'InsertDate': insertDate
-                }
-            )
-            table.put_item(
-                Item={
-                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}_player#{player}",
-                    'SK': f"game#{insertDate}",
-                    'InsertDate': insertDate
-                }
-            )
+            # table.put_item(
+            #     Item={
+            #         'PK': f"player#{player}",
+            #         'SK': f"league#{gameData['League']}_season#{gameData['Season']}",
+            #         'InsertDate': insertDate
+            #     }
+            # )
+            # table.put_item(
+            #     Item={
+            #         'PK': f"league#{gameData['League']}_season#{gameData['Season']}_player#{player}",
+            #         'SK': f"game#{insertDate}",
+            #         'InsertDate': insertDate
+            #     }
+            # )
             table.update_item(
                 Key={
                     'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
                     'SK': f"stats_player#{player}"
                 },
-                UpdateExpression='SET GamesWon = if_not_exists(GamesWon,:z) + :gw, GamesLost = if_not_exists(GamesLost,:z) + :gl, TotalGamesPlayed = if_not_exists(TotalGamesPlayed,:z) + :tgp, UpdateDate = :ud',
+                UpdateExpression='SET Player = :p, GamesWon = if_not_exists(GamesWon,:z) + :gw, GamesLost = if_not_exists(GamesLost,:z) + :gl, TotalGamesPlayed = if_not_exists(TotalGamesPlayed,:z) + :tgp, UpdateDate = :ud',
                 ExpressionAttributeValues={
+                    ':p': player,
                     ':z': 0,
                     ':gw': playerStats[player]['GamesWon'],
                     ':gl': playerStats[player]['GamesLost'],
@@ -77,12 +78,12 @@ def lambda_handler(event, context):
                 }
             )
 
-    table.put_item(
-        Item={
-            'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
-            'SK': f"game#{insertDate}"
-        }
-    )
+    # table.put_item(
+    #     Item={
+    #         'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
+    #         'SK': f"game#{insertDate}"
+    #     }
+    # )
 
     return {
         "statusCode": 200,

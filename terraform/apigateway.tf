@@ -6,6 +6,9 @@ resource "aws_apigatewayv2_api" "app_api" {
   }
 }
 
+
+
+
 resource "aws_apigatewayv2_integration" "insert_game_integration" {
   api_id           = aws_apigatewayv2_api.app_api.id
   integration_type = "AWS_PROXY"
@@ -20,6 +23,26 @@ resource "aws_apigatewayv2_route" "insert_game_api" {
   route_key = "POST /insert-game"
   target = "integrations/${aws_apigatewayv2_integration.insert_game_integration.id}"
 }
+
+
+resource "aws_apigatewayv2_integration" "get_player_stats_integration" {
+  api_id           = aws_apigatewayv2_api.app_api.id
+  integration_type = "AWS_PROXY"
+
+  integration_uri           = aws_lambda_function.get_player_stats.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "get_player_stats_api" {
+  api_id    = aws_apigatewayv2_api.app_api.id
+  route_key = "GET /get-player-stats"
+  target = "integrations/${aws_apigatewayv2_integration.get_player_stats_integration.id}"
+}
+
+
+
+
+
+
 
 resource "aws_apigatewayv2_stage" "app_api_stage" {
   api_id = aws_apigatewayv2_api.app_api.id

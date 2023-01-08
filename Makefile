@@ -9,3 +9,9 @@ lambdas:
 	zip -rj app/lambda/insert_game.zip app/lambda/insert_game
 	aws s3 cp app/lambda/insert_game.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-insert-game --s3-bucket volleybill.com-lambda-functions --s3-key insert_game.zip > /dev/null
+
+	(cd app/lambda/get_player_stats && pip install --upgrade -r requirements.txt --target ./package)
+	(cd app/lambda/get_player_stats/package && zip -r ../../get_player_stats.zip .)
+	(cd app/lambda/get_player_stats && zip -r ../get_player_stats.zip main.py)
+	aws s3 cp app/lambda/get_player_stats.zip s3://volleybill.com-lambda-functions
+	aws lambda update-function-code --function-name volleybill-get-player-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_player_stats.zip > /dev/null
