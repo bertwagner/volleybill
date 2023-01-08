@@ -19,8 +19,6 @@ def lambda_handler(event, context):
             ":sk": "stats_player#"
         }
     )
-
-    #results = dynamodb_items_to_json(response['Items'])
     results = json.dumps(response['Items'], cls=DecimalEncoder)
 
     return {
