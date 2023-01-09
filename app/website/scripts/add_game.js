@@ -57,14 +57,6 @@ var handleDrop = function (e) {
 ///
 
 // All page events
-// window.addEventListener('change', function(e) {
-//     // Sync Team1/2 Wins/Losses
-//     if (e.target.classList.contains('score-selector')) {
-//         document.querySelector("#Team2Wins").value = document.querySelector("#Team1Losses").value;
-//         document.querySelector("#Team2Losses").value = document.querySelector("#Team1Wins").value;
-//     }
-// }, true);
-
 window.addEventListener('click', function (e) {
 
     // Return player to pool on click 
@@ -95,17 +87,6 @@ window.addEventListener('click', function (e) {
             // Add the player to the bench
             document.querySelector("#PlayerPool").prepend(newPlayer);
             newPlayer.addEventListener('dragstart', handleDragStart, false);
-
-            // // Add the player to the payer/payee dropdowns
-            // var newOption = function(name) {
-            //     var opt = document.createElement("option");
-            //     opt.setAttribute("value",name.value);
-            //     opt.innerHTML = name;
-            //     return opt;
-            // }
-
-            // document.querySelector("#Payer").append(new newOption(name.value));
-            // document.querySelector("#Payee").append(new newOption(name.value));
 
             // Clear and hide the form
             document.querySelector("#AddPlayerForm").classList.add("d-none");
@@ -193,49 +174,55 @@ document.querySelector("#GameDate").value = new Date().toDateInputValue();
 gameId = generateUUID();
 
 // Populate dropdowns and the bench
-// ajax()
-//     .get('https://clbivolleyballinteractions.azurewebsites.net/api/GetDistinctPlayers?code=99R46uptkGih4U8YJESBsfzAKh9nLhDi/oaXtoBP121eJZHNl24uaA==')
-//     .then(function(response){
-var response = [{ "Player": "Chris", "GameCount": 103 }, { "Player": "Bert", "GameCount": 95 }, { "Player": "Keith", "GameCount": 94 }, { "Player": "Mehmet", "GameCount": 93 }, { "Player": "J.T.", "GameCount": 92 }, { "Player": "Tony", "GameCount": 89 }, { "Player": "David", "GameCount": 35 }, { "Player": "Jake", "GameCount": 34 }, { "Player": "Tad", "GameCount": 32 }, { "Player": "Josh", "GameCount": 30 }, { "Player": "Ray", "GameCount": 23 }, { "Player": "Charles", "GameCount": 22 }, { "Player": "Eric", "GameCount": 17 }, { "Player": "PK", "GameCount": 14 }, { "Player": "Jeff", "GameCount": 11 }, { "Player": "Elson", "GameCount": 10 }, { "Player": "Nick", "GameCount": 9 }, { "Player": "Justin", "GameCount": 7 }, { "Player": "Paul", "GameCount": 7 }, { "Player": "Bill", "GameCount": 5 }, { "Player": "Mako", "GameCount": 2 }, { "Player": "Jim", "GameCount": 2 }, { "Player": "Kishore", "GameCount": 2 }, { "Player": "Jacob", "GameCount": 2 }, { "Player": "CC", "GameCount": 1 }, { "Player": "Brett", "GameCount": 1 }, { "Player": "Tony L", "GameCount": 1 }, { "Player": "Jenn", "GameCount": 1 }];
-for (var i = 0; i < response.length; i++) {
-    var player = response[i].Player;
+fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
+    method: 'get',
+})
+.then(function(response) {
+    if (response.ok) {
+        return response.json();
+        }
 
-    // Populate bench
-    var playerButton = document.createElement("button");
-    playerButton.classList.add("player-name");
-    playerButton.classList.add("btn");
-    playerButton.classList.add("btn-sm");
-    playerButton.classList.add("btn-primary");
-    playerButton.classList.add("m-1");
-    playerButton.setAttribute("draggable", "true");
-    playerButton.setAttribute("id", player);
-    playerButton.setAttribute("type", "button");
+    alert('Error while retrieving data.');
+    return Promise.reject(response);
 
-    var buttonSpan = document.createElement("span");
-    buttonSpan.setAttribute("aria-hidden", "true");
-    buttonSpan.classList.add("delete-player");
-    buttonSpan.innerHTML = "&times;";
+})
+.then((data) => {
+    for (var i = 0; i < data.length; i++) {
+        var player = data[i].Player;
 
-    playerButton.innerHTML = player.toString() + ' ';
-    playerButton.appendChild(buttonSpan);
-    document.querySelector("#PlayerPool").appendChild(playerButton);
-}
+        // Populate bench
+        var playerButton = document.createElement("button");
+        playerButton.classList.add("player-name");
+        playerButton.classList.add("btn");
+        playerButton.classList.add("btn-sm");
+        playerButton.classList.add("btn-primary");
+        playerButton.classList.add("m-1");
+        playerButton.setAttribute("draggable", "true");
+        playerButton.setAttribute("id", player);
+        playerButton.setAttribute("type", "button");
+    
+        var buttonSpan = document.createElement("span");
+        buttonSpan.setAttribute("aria-hidden", "true");
+        buttonSpan.classList.add("delete-player");
+        buttonSpan.innerHTML = "&times;";
+    
+        playerButton.innerHTML = player.toString() + ' ';
+        playerButton.appendChild(buttonSpan);
+        document.querySelector("#PlayerPool").appendChild(playerButton);
+    }
 
-// Add drag/drop events to player buttons
-var playerButtons = document.querySelectorAll('.player-name');
-[].forEach.call(playerButtons, function (player) {
-    player.addEventListener('dragstart', handleDragStart, false);
-});
-var teamGroupings = document.querySelectorAll('.team-grouping');
-[].forEach.call(teamGroupings, function (teamGrouping) {
-    teamGrouping.addEventListener('dragover', handleDragOver, false);
-    teamGrouping.addEventListener('drop', handleDrop, false);
-});
-// })
-// .catch(function (error) {
-//     console.log('ajax failure', error);
-// });
+    // Add drag/drop events to player buttons
+    var playerButtons = document.querySelectorAll('.player-name');
+    [].forEach.call(playerButtons, function (player) {
+        player.addEventListener('dragstart', handleDragStart, false);
+    });
 
+    var teamGroupings = document.querySelectorAll('.team-grouping');
+    [].forEach.call(teamGroupings, function (teamGrouping) {
+        teamGrouping.addEventListener('dragover', handleDragOver, false);
+        teamGrouping.addEventListener('drop', handleDrop, false);
+    });
+})
 
 
 // Populate the default serialized teams
