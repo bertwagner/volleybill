@@ -168,7 +168,7 @@ window.addEventListener('click', function (e) {
 ///
 
 // Set the default Game Date
-document.querySelector("#GameDate").value = new Date().toDateInputValue();
+document.querySelector("#PaymentDate").value = new Date().toDateInputValue();
 
 // Set a unique id for this game
 gameId = generateUUID();

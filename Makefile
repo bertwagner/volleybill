@@ -13,3 +13,7 @@ lambdas:
 	zip -rj app/lambda/get_player_stats.zip app/lambda/get_player_stats
 	aws s3 cp app/lambda/get_player_stats.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-get-player-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_player_stats.zip > /dev/null
+
+	zip -rj app/lambda/insert_payment.zip app/lambda/insert_payment
+	aws s3 cp app/lambda/insert_payment.zip s3://volleybill.com-lambda-functions
+	aws lambda update-function-code --function-name volleybill-insert-payment --s3-bucket volleybill.com-lambda-functions --s3-key insert_payment.zip > /dev/null

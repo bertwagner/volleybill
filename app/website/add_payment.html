@@ -10,10 +10,7 @@
   <link rel="stylesheet" href="css/tabler.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .team-grouping {
-      border: 1px dashed gainsboro;
-      min-height: 73px;
-    }
+   
 
     /* remove drop down arrow from select */
     select.form-control {
@@ -22,19 +19,8 @@
       appearance: none;
     }
 
-    /* make the preprended W:/L: groups the same width */
-    .input-group>.input-group-prepend {
-      width: 80px;
-    }
-
     .input-group .input-group-text {
       width: 100%;
-    }
-
-    /* make the add player button smaller */
-    button#AddPlayer {
-      padding: 0 .25rem;
-      margin: 0;
     }
 
   </style>
@@ -114,7 +100,7 @@
           <div class="row g-2 align-items-center">
             <div class="col">
               <h2 class="page-title">
-                Add Game
+                Add Payment
               </h2>
             </div>
           </div>
@@ -124,71 +110,34 @@
         <div class="container-xl">
           <img src="loading.gif" id="loadingImagePage" />
           <div class="row row-cards">
-            <form id="scoreForm" class="hidden">
+            <!-- <form id="scoreForm" class="hidden"> -->
+            <form id="scoreForm">
               <div class="row">
                 <div class="col">
-                  <label for="GameDate">Game Date</label>
-                  <input type="date" class="form-control" name="GameDate" id="GameDate" aria-describedby="GameDate">
+                  <label for="GameDate">Payment Date</label>
+                  <input type="date" class="form-control" name="PaymentDate" id="PaymentDate" aria-describedby="PaymentDate">
                 </div>
               </div>
-
               <div class="row">
                 <div class="col">
-                  <label for="Team1">Scores</label>
-                  <div class="row no-gutters">
-                    <div class="col">
-                      <label class="sr-only" for="Team1Wins"></label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text form-control-sm">Team 1:</div>
-                        </div>
-                        <input class="form-control form-control-sm score-selector" name="Team1Score" type="tel"
-                          id="Team1Score" />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label class="sr-only" for="Team1Losses"></label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text form-control-sm">Team 2:</div>
-                        </div>
-                        <input class="form-control form-control-sm score-selector" name="Team2Score" type="tel"
-                          id="Team2Score" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row my-2">
-                    <div class="col team-grouping mx-3 p-3" id="team-grouping-1">
-
-                    </div>
-                    <div class="col team-grouping mx-3 p-3" id="team-grouping-2">
-
-                    </div>
-                  </div>
+                  <label for="Payer">Payer</label>
+                  <select class="form-control" name="Payer" id="Payer" aria-describedby="Payer">
+                    <option value="" selected="" disabled="" hidden="">Select Player</option>
+                  <option value="Chris">Chris</option><option value="Bert">Bert</option><option value="Keith">Keith</option><option value="Mehmet">Mehmet</option><option value="J.T.">J.T.</option><option value="Tony">Tony</option><option value="David">David</option><option value="Jake">Jake</option><option value="Tad">Tad</option><option value="Josh">Josh</option><option value="Ray">Ray</option><option value="Charles">Charles</option><option value="Eric">Eric</option><option value="PK">PK</option><option value="Jeff">Jeff</option><option value="Elson">Elson</option><option value="Nick">Nick</option><option value="Justin">Justin</option><option value="Paul">Paul</option><option value="Bill">Bill</option><option value="Mako">Mako</option><option value="Jim">Jim</option><option value="Kishore">Kishore</option><option value="Jacob">Jacob</option><option value="CC">CC</option><option value="Brett">Brett</option><option value="Tony L">Tony L</option><option value="Jenn">Jenn</option></select>
                 </div>
-
-                <input type="hidden" name="SerializedTeams" id="SerializedTeams" />
-              </div>
-
-              <div class="row">
                 <div class="col">
-                  <label for="PlayerPool">Bench ( <a href="#" id="AddPlayer">+</a> )</label>
-                  <div class="row form-group d-none no-gutters" id="AddPlayerForm">
-                    <div class="col-sm-3">
-                      <label for="AddPlayerName" class="sr-only">Player Name</label>
-                      <input type="text" class="form-control form-control-sm" id="AddPlayerName"
-                        aria-describedby="AddPlayerName" validation="^(\w|\.)+$">
+                  <label for="Payee">Payee</label>
+                  <select class="form-control" name="Payee" id="Payee" aria-describedby="Payee">
+                    <option value="Force Sports">Force Sports</option>
+                  <option value="Chris">Chris</option><option value="Bert">Bert</option><option value="Keith">Keith</option><option value="Mehmet">Mehmet</option><option value="J.T.">J.T.</option><option value="Tony">Tony</option><option value="David">David</option><option value="Jake">Jake</option><option value="Tad">Tad</option><option value="Josh">Josh</option><option value="Ray">Ray</option><option value="Charles">Charles</option><option value="Eric">Eric</option><option value="PK">PK</option><option value="Jeff">Jeff</option><option value="Elson">Elson</option><option value="Nick">Nick</option><option value="Justin">Justin</option><option value="Paul">Paul</option><option value="Bill">Bill</option><option value="Mako">Mako</option><option value="Jim">Jim</option><option value="Kishore">Kishore</option><option value="Jacob">Jacob</option><option value="CC">CC</option><option value="Brett">Brett</option><option value="Tony L">Tony L</option><option value="Jenn">Jenn</option></select>
+                </div>
+                <div class="col">
+                  <label for="Amount">Amount</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">$</span>
                     </div>
-                    <div class="col-sm-1 mx-2">
-                      <button type="button" id="AddPlayerToPool" class="btn btn-primary btn-sm">
-                        Add
-                      </button>
-                    </div>
-                    <div class="col-sm-8">
-
-                    </div>
-                  </div>
-                  <div class="col team-grouping p-3" id="PlayerPool">
+                    <input type="number" class="form-control" aria-label="Amount" name="Amount" id="Amount" value="30" pattern="^((\d+)|(\d{1,3})(\,\d{3}|)*)(\.\d{2}|)$">
                   </div>
                 </div>
               </div>
@@ -198,7 +147,6 @@
                   <button type="button" class="btn btn-primary" id="save">Save</button><img src="loading.gif" class="hidden" id="loadingImage" />
                 </div>
               </div>
-              <input type="hidden" name="SerializedTeams" id="SerializedTeams" />
             </form>
 
           </div>
@@ -209,7 +157,7 @@
   <script src="scripts/tabler.min.js"></script>
   <script src="scripts/ajax.min.js"></script>
   <script src="scripts/dragdroptouch.js"></script>
-  <script src="scripts/add_game.js"></script>
+  <script src="scripts/add_payment.js"></script>
 </body>
 
 </html>

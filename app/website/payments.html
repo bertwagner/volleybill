@@ -4,40 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>VolleyBill</title>
   <link rel="stylesheet" href="css/tabler.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .team-grouping {
-      border: 1px dashed gainsboro;
-      min-height: 73px;
-    }
-
-    /* remove drop down arrow from select */
-    select.form-control {
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    /* make the preprended W:/L: groups the same width */
-    .input-group>.input-group-prepend {
-      width: 80px;
-    }
-
-    .input-group .input-group-text {
-      width: 100%;
-    }
-
-    /* make the add player button smaller */
-    button#AddPlayer {
-      padding: 0 .25rem;
-      margin: 0;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -114,102 +85,64 @@
           <div class="row g-2 align-items-center">
             <div class="col">
               <h2 class="page-title">
-                Add Game
+                Payments
               </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+              <div class="btn-list">
+                <a href="add_payment.html" class="btn btn-primary d-none d-sm-inline-block">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Add Payment
+                </a>
+                <a href="add_payment.html" class="btn btn-primary d-sm-none btn-icon" aria-label="Add game">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="page-body">
         <div class="container-xl">
-          <img src="loading.gif" id="loadingImagePage" />
-          <div class="row row-cards">
-            <form id="scoreForm" class="hidden">
-              <div class="row">
-                <div class="col">
-                  <label for="GameDate">Game Date</label>
-                  <input type="date" class="form-control" name="GameDate" id="GameDate" aria-describedby="GameDate">
+          <img src="loading.gif" id="loadingImage" />
+          <div  id="statsTable" class="row row-cards hidden">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="table-responsive">
+                  <table class="table table-vcenter card-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Games Won</th>
+                        <th>Games Lost</th>
+                        <th>Game Win %</th>
+                      </tr>
+                    </thead>
+                    <tbody id="statsBody"></tbody>
+                  </table>
                 </div>
               </div>
-
-              <div class="row">
-                <div class="col">
-                  <label for="Team1">Scores</label>
-                  <div class="row no-gutters">
-                    <div class="col">
-                      <label class="sr-only" for="Team1Wins"></label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text form-control-sm">Team 1:</div>
-                        </div>
-                        <input class="form-control form-control-sm score-selector" name="Team1Score" type="tel"
-                          id="Team1Score" />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label class="sr-only" for="Team1Losses"></label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text form-control-sm">Team 2:</div>
-                        </div>
-                        <input class="form-control form-control-sm score-selector" name="Team2Score" type="tel"
-                          id="Team2Score" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row my-2">
-                    <div class="col team-grouping mx-3 p-3" id="team-grouping-1">
-
-                    </div>
-                    <div class="col team-grouping mx-3 p-3" id="team-grouping-2">
-
-                    </div>
-                  </div>
-                </div>
-
-                <input type="hidden" name="SerializedTeams" id="SerializedTeams" />
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <label for="PlayerPool">Bench ( <a href="#" id="AddPlayer">+</a> )</label>
-                  <div class="row form-group d-none no-gutters" id="AddPlayerForm">
-                    <div class="col-sm-3">
-                      <label for="AddPlayerName" class="sr-only">Player Name</label>
-                      <input type="text" class="form-control form-control-sm" id="AddPlayerName"
-                        aria-describedby="AddPlayerName" validation="^(\w|\.)+$">
-                    </div>
-                    <div class="col-sm-1 mx-2">
-                      <button type="button" id="AddPlayerToPool" class="btn btn-primary btn-sm">
-                        Add
-                      </button>
-                    </div>
-                    <div class="col-sm-8">
-
-                    </div>
-                  </div>
-                  <div class="col team-grouping p-3" id="PlayerPool">
-                  </div>
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col">
-                  <button type="button" class="btn btn-primary" id="save">Save</button><img src="loading.gif" class="hidden" id="loadingImage" />
-                </div>
-              </div>
-              <input type="hidden" name="SerializedTeams" id="SerializedTeams" />
-            </form>
-
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <script src="scripts/tabler.min.js"></script>
-  <script src="scripts/ajax.min.js"></script>
-  <script src="scripts/dragdroptouch.js"></script>
-  <script src="scripts/add_game.js"></script>
+  <script src="scripts/payments.js"></script>
 </body>
 
 </html>
