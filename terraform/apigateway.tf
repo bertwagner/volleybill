@@ -53,6 +53,18 @@ resource "aws_apigatewayv2_route" "insert_payment_api" {
   target = "integrations/${aws_apigatewayv2_integration.insert_payment_integration.id}"
 }
 
+resource "aws_apigatewayv2_integration" "get_payment_stats_integration" {
+  api_id           = aws_apigatewayv2_api.app_api.id
+  integration_type = "AWS_PROXY"
+
+  integration_uri           = aws_lambda_function.get_payment_stats.invoke_arn
+}
+
+resource "aws_apigatewayv2_route" "get_payment_stats_api" {
+  api_id    = aws_apigatewayv2_api.app_api.id
+  route_key = "GET /get-payment-stats"
+  target = "integrations/${aws_apigatewayv2_integration.get_payment_stats_integration.id}"
+}
 
 
 

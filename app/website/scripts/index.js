@@ -36,11 +36,15 @@ fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
     }
 
     // Sort
-    data.sort(function(a,b) {
-        return b.GamesWon - a.GamesWon;
+    data.sort(function(a,b){
+        if (a.GamesWon < b.GamesWon) {
+            return 1;
+        }
+        if (a.GamesWon > b.GamesWon) {
+            return -1;
+        } 
+        return 0;
     });
-
-    console.log(data)
 
     table = document.getElementById("statsBody")
     for (var i = 0; i < data.length; i++) {

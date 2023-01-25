@@ -12,8 +12,8 @@ def lambda_handler(event, context):
 
     table.update_item(
         Key={
-            'PK': f"league#{gameData['League']}_season#{gameData['Season']}_payer#{gameData['Payer']}",
-            'SK': f"payee#{gameData['Payee']}_date#{gameData['PaymentDate']}"
+            'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
+            'SK': f"payer#{gameData['Payer']}_payee#{gameData['Payee']}_date#{gameData['PaymentDate']}"
         },
         UpdateExpression='SET Payer = :p, Payee = :pe, Amount = :a, PaymentDate = :pd, InsertDate = :id',
         ExpressionAttributeValues={
