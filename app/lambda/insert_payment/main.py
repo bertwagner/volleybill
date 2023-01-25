@@ -1,6 +1,7 @@
 import boto3
 import json
 import datetime
+from decimal import Decimal
 
 def lambda_handler(event, context):
     gameData = json.loads(event['body'])
@@ -24,6 +25,21 @@ def lambda_handler(event, context):
             ':id': insertDate
         }
     )
+
+    table.update_item(
+        Key={
+            'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
+            'SK': f"stats_payer#{gameData['Payer']}"
+        },
+        UpdateExpression='SET Payer = :p, AmountPaid = if_not_exists(AmountPaid,:z) + :gw, UpdateDate = :ud',
+        ExpressionAttributeValues={
+            ':p': gameData['Payer'],
+            ':z': 0,
+            ':gw': Decimal(gameData['Amount']),
+            ':ud': insertDate
+        }
+    )
+
 
     return {
         "statusCode": 200,

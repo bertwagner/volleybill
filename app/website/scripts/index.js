@@ -65,7 +65,7 @@ fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
         row.appendChild(tdGamesLost)
 
         var tdGamesWinPercentage= document.createElement("td")
-        tdGamesWinPercentage.innerHTML= data[i]['GameWinPercentage']*100 + '%'
+        tdGamesWinPercentage.innerHTML= (data[i]['GameWinPercentage']*100).toFixed(2) + '%'
         tdGamesWinPercentage.classList.add("text-muted")
         row.appendChild(tdGamesWinPercentage)
 

@@ -16,7 +16,7 @@ def lambda_handler(event, context):
         KeyConditionExpression='PK = :pk AND begins_with(SK, :sk)',
         ExpressionAttributeValues={
             ":pk": f"league#{gameData['league']}_season#{gameData['season']}",
-            ":sk": "payer#"
+            ":sk": "stats_payer#"
         }
     )
     results = json.dumps(response['Items'], cls=DecimalEncoder)

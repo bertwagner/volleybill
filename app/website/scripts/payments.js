@@ -34,10 +34,10 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
     
     // Sort
     data.sort(function(a,b){
-        if (a.PaymentDate < b.PaymentDate) {
+        if (a.AmountPaid < b.AmountPaid) {
             return 1;
         }
-        if (a.PaymentDate > b.PaymentDate) {
+        if (a.AmountPaid > b.AmountPaid) {
             return -1;
         } 
         return 0;
@@ -54,19 +54,9 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
         row.appendChild(tdPlayer)
 
         var tdGamesWon= document.createElement("td")
-        tdGamesWon.innerHTML= data[i]['Payee']
+        tdGamesWon.innerHTML= data[i]['AmountPaid']
         tdGamesWon.classList.add("text-muted")
         row.appendChild(tdGamesWon)
-
-        var tdGamesLost= document.createElement("td")
-        tdGamesLost.innerHTML= data[i]['Amount']
-        tdGamesLost.classList.add("text-muted")
-        row.appendChild(tdGamesLost)
-
-        var tdGamesWinPercentage= document.createElement("td")
-        tdGamesWinPercentage.innerHTML= data[i]['PaymentDate']
-        tdGamesWinPercentage.classList.add("text-muted")
-        row.appendChild(tdGamesWinPercentage)
 
         table.appendChild(row);
     }
