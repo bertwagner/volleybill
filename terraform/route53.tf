@@ -39,3 +39,5 @@ resource "aws_route53_record" "apigateway_cname" {
   
   records = [aws_apigatewayv2_domain_name.app_api_domain.domain_name_configuration[0].target_domain_name]
 }
+
+

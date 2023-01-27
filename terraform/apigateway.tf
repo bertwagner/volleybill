@@ -22,6 +22,8 @@ resource "aws_apigatewayv2_route" "insert_game_api" {
   api_id    = aws_apigatewayv2_api.app_api.id
   route_key = "POST /insert-game"
   target = "integrations/${aws_apigatewayv2_integration.insert_game_integration.id}"
+  authorization_type = "JWT"
+  authorizer_id = aws_apigatewayv2_authorizer.auth.id
 }
 
 
@@ -51,7 +53,10 @@ resource "aws_apigatewayv2_route" "insert_payment_api" {
   api_id    = aws_apigatewayv2_api.app_api.id
   route_key = "POST /insert-payment"
   target = "integrations/${aws_apigatewayv2_integration.insert_payment_integration.id}"
+  authorization_type = "JWT"
+  authorizer_id = aws_apigatewayv2_authorizer.auth.id
 }
+
 
 resource "aws_apigatewayv2_integration" "get_payment_stats_integration" {
   api_id           = aws_apigatewayv2_api.app_api.id
@@ -65,6 +70,32 @@ resource "aws_apigatewayv2_route" "get_payment_stats_api" {
   route_key = "GET /get-payment-stats"
   target = "integrations/${aws_apigatewayv2_integration.get_payment_stats_integration.id}"
 }
+
+
+
+
+
+
+
+
+resource "aws_apigatewayv2_authorizer" "auth" {
+  api_id           = aws_apigatewayv2_api.app_api.id
+  authorizer_type  = "JWT"
+  identity_sources = ["$request.header.Authorization"]
+  name             = "cognito-authorizer"
+
+  jwt_configuration {
+    audience = [aws_cognito_user_pool_client.pool_client.id]
+    issuer   = "https://${aws_cognito_user_pool.pool.endpoint}"
+  }
+}
+
+
+
+
+
+
+
 
 
 
