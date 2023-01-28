@@ -3,6 +3,8 @@ resource "aws_apigatewayv2_api" "app_api" {
   protocol_type = "HTTP"
   cors_configuration {
     allow_origins = ["https://${var.domain}","https://api.${var.domain}"]
+    allow_methods = ["GET","POST","OPTIONS"]
+    allow_headers = ["Authorization","X-Amz-Target","Content-Type","Access-Control-Allow-Origin","Access-Control-Allow-Headers"]
   }
 }
 

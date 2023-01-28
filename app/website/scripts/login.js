@@ -64,8 +64,9 @@ window.addEventListener('click', function (e) {
             })
             .then((data) => {
                 //success.
-                document.cookie = "AccessToken=" + data.AuthenticationResult.AccessToken + "; RefreshToken=" + data.AuthenticationResult.RefreshToken + "; path=/; SameSite=Strict";
-
+                document.cookie = "AccessToken=" + data.AuthenticationResult.AccessToken + "; path=/; SameSite=Strict";
+                document.cookie = "RefreshToken=" + data.AuthenticationResult.RefreshToken + "; path=/; SameSite=Strict";
+                
 
                 //hide form and display success
                 document.querySelector("#loginForm").classList.add("hidden");

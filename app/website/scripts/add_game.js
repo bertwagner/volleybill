@@ -49,7 +49,21 @@ var handleDrop = function (e) {
     serializeTeams();
 }
 
-
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
 
 
 ///
@@ -123,23 +137,36 @@ window.addEventListener('click', function (e) {
             e.target.classList.remove('hidden');
             document.getElementById("loadingImage").classList.add('hidden');
         }
+        else if (getCookie('RefreshToken')=="") {
+            alert('You must login first.');
+            e.target.disabled = false;
+            e.target.classList.remove('hidden');
+            document.getElementById("loadingImage").classList.add('hidden');
+        }
         else {
-            var dataToSave = {
-                "League": 1,
-                "Season": 3,
-                "Date": gameDate,
-                "Game": gameId,
-                "Teams": [team1Players,team2Players],
-                "Scores": [team1Score,team2Score],
+            // Reauth
+            refreshToken = getCookie("RefreshToken");
+
+            var authData = {
+                "AuthParameters" : {
+                    "REFRESH_TOKEN": refreshToken
+                },
+                "AuthFlow": "REFRESH_TOKEN_AUTH",
+                "ClientId": "4r7kkii1u5ui5eij4pp9aj9knv"
             };
-            
-            fetch('https://api.volleybill.com/insert-game', {
+
+            var headers = new Headers();
+            headers.append('X-Amz-Target','AWSCognitoIdentityProviderService.InitiateAuth');
+            headers.append('Content-Type','application/x-amz-json-1.1');
+
+            fetch('https://cognito-idp.us-east-1.amazonaws.com', {
                 method: 'post',
-                body: JSON.stringify(dataToSave)
+                headers: headers,
+                body: JSON.stringify(authData)
             })
             .then(function(response) {
                 if (response.ok) {
-                    return response;
+                    return response.json();
                     }
             
                 alert('Error while saving data.');
@@ -147,12 +174,45 @@ window.addEventListener('click', function (e) {
 
             })
             .then((data) => {
-                //success. reset form
-                gameId=generateUUID();
-                document.querySelector("#Team1Score").value='';
-                document.querySelector("#Team2Score").value='';
-                document.querySelector("#SerializedTeams").value = '';
+                //success.
+                document.cookie = "AccessToken=" + data.AuthenticationResult.AccessToken + "; RefreshToken=" + data.AuthenticationResult.RefreshToken + "; path=/; SameSite=Strict";
             })
+            .then(function(){
+                var dataToSave = {
+                    "League": 1,
+                    "Season": 3,
+                    "Date": gameDate,
+                    "Game": gameId,
+                    "Teams": [team1Players,team2Players],
+                    "Scores": [team1Score,team2Score],
+                };
+                headers = new Headers();
+                headers.append('Authorization','Bearer '+getCookie("AccessToken"));
+
+                fetch('https://api.volleybill.com/insert-game', {
+                    method: 'post',
+                    headers: headers,
+                    body: JSON.stringify(dataToSave)
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        return response;
+                        }
+                
+                    alert('Error while saving data.');
+                    return Promise.reject(response);
+    
+                })
+                .then((data) => {
+                    //success. reset form
+                    gameId=generateUUID();
+                    document.querySelector("#Team1Score").value='';
+                    document.querySelector("#Team2Score").value='';
+                    document.querySelector("#SerializedTeams").value = '';
+                })
+
+            })
+            
             .finally(function() {
                 e.target.disabled = false;
                 e.target.classList.remove('hidden');
