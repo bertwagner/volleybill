@@ -45,8 +45,12 @@ def lambda_handler(event, context):
     insertDate = datetime.datetime.utcnow().isoformat()
 
     playerStats = calculate_stats(gameData)
+    teamId=-1
 
     for team in gameData['Teams']:
+        teamId=teamId+1
+        otherTeamId=1 if teamId==0 else 0
+
         for player in team:
             # table.put_item(
             #     Item={
@@ -55,13 +59,20 @@ def lambda_handler(event, context):
             #         'InsertDate': insertDate
             #     }
             # )
-            # table.put_item(
-            #     Item={
-            #         'PK': f"league#{gameData['League']}_season#{gameData['Season']}_player#{player}",
-            #         'SK': f"game#{insertDate}",
-            #         'InsertDate': insertDate
-            #     }
-            # )
+            table.put_item(
+                Item={
+                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}_game#{insertDate}",
+                    'SK': f"player#{player}",
+                    'League': gameData['League'],
+                    'Season': gameData['Season'],
+                    'Player': player,
+                    'Team': teamId,
+                    'Points': gameData['Scores'][teamId],
+                    'IsWin': True if int(gameData['Scores'][teamId]) > int(gameData['Scores'][otherTeamId]) else False,
+                    'PointDifferential': int(gameData['Scores'][teamId]) - int(gameData['Scores'][otherTeamId]),
+                    'InsertDate': insertDate
+                }
+            )
             table.update_item(
                 Key={
                     'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
