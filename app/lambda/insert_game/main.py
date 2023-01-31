@@ -62,7 +62,7 @@ def lambda_handler(event, context):
             # )
             table.put_item(
                 Item={
-                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}date#{gameData['Date']}_game#{insertDate}",
+                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}_date#{gameData['Date']}_game#{insertDate}",
                     'SK': f"player#{player}",
                     'League': gameData['League'],
                     'Season': gameData['Season'],
