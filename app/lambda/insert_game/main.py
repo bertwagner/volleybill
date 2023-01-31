@@ -62,7 +62,7 @@ def lambda_handler(event, context):
             # )
             table.put_item(
                 Item={
-                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}_game#{insertDate}",
+                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}date#{gameData['Date']}_game#{insertDate}",
                     'SK': f"player#{player}",
                     'League': gameData['League'],
                     'Season': gameData['Season'],
@@ -71,6 +71,7 @@ def lambda_handler(event, context):
                     'Points': gameData['Scores'][teamId],
                     'IsWin': True if int(gameData['Scores'][teamId]) > int(gameData['Scores'][otherTeamId]) else False,
                     'PointDifferential': int(gameData['Scores'][teamId]) - int(gameData['Scores'][otherTeamId]),
+                    'GameDate': gameData['Date'],
                     'InsertDate': insertDate
                 }
             )
