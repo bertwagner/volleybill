@@ -5,7 +5,7 @@ import datetime
 def calculate_stats(gameData):
     playerStats = {}
     for player in gameData['Teams'][0]:
-        if gameData['Scores'][0] > gameData['Scores'][1]:
+        if int(gameData['Scores'][0]) > int(gameData['Scores'][1]):
             gamesWon = 1
             gamesLost = 0
         else:
@@ -20,7 +20,7 @@ def calculate_stats(gameData):
         playerStats[player] = stats
 
     for player in gameData['Teams'][1]:
-        if gameData['Scores'][1] > gameData['Scores'][0]:
+        if int(gameData['Scores'][1]) > int(gameData['Scores'][0]):
             gamesWon = 1
             gamesLost = 0
         else:
@@ -45,6 +45,7 @@ def lambda_handler(event, context):
     insertDate = datetime.datetime.utcnow().isoformat()
 
     playerStats = calculate_stats(gameData)
+    print('calculated stats:', playerStats)
     teamId=-1
 
     for team in gameData['Teams']:
@@ -82,8 +83,8 @@ def lambda_handler(event, context):
                 ExpressionAttributeValues={
                     ':p': player,
                     ':z': 0,
-                    ':gw': playerStats[player]['GamesWon'],
-                    ':gl': playerStats[player]['GamesLost'],
+                    ':gw': int(playerStats[player]['GamesWon']),
+                    ':gl': int(playerStats[player]['GamesLost']),
                     ':tgp': 1,
                     ':ud': insertDate
                 }
