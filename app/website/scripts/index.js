@@ -7,6 +7,22 @@
 /// Methods
 ///
 
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 
 ///
 /// Event Listeners
@@ -15,6 +31,11 @@
 ///
 /// Inits
 ///
+
+// unhide add payment button if login cookie found
+if (getCookie("AccessToken") != "") {
+    document.querySelector("#AddGame").classList.remove("hidden");
+}
 
 // Populate player stats
 fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
