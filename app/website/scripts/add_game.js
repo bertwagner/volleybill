@@ -210,14 +210,15 @@ window.addEventListener('click', function (e) {
                     document.querySelector("#Team2Score").value='';
                     document.querySelector("#SerializedTeams").value = '';
                 })
+                .finally(function() {
+                    e.target.disabled = false;
+                    e.target.classList.remove('hidden');
+                    document.getElementById("loadingImage").classList.add('hidden');
+                });
 
             })
             
-            .finally(function() {
-                e.target.disabled = false;
-                e.target.classList.remove('hidden');
-                document.getElementById("loadingImage").classList.add('hidden');
-            });
+            
         }
     }
 

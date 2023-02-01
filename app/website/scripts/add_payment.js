@@ -142,12 +142,13 @@ window.addEventListener('click', function (e) {
                     document.querySelector("#Payee").value='Force Sports';
                     document.querySelector("#Amount").value = '30';
                 })
+                .finally(function() {
+                    e.target.disabled = false;
+                    e.target.classList.remove('hidden');
+                    document.getElementById("loadingImage").classList.add('hidden');
+                });
             })
-            .finally(function() {
-                e.target.disabled = false;
-                e.target.classList.remove('hidden');
-                document.getElementById("loadingImage").classList.add('hidden');
-            });
+            
         }
     }
 
