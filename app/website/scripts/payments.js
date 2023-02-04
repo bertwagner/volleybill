@@ -51,7 +51,7 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
 })
 .then((data) => {
     
-    
+    console.log(data)
     // Sort
     data.sort(function(a,b){
         if (a.AmountPaid < b.AmountPaid) {

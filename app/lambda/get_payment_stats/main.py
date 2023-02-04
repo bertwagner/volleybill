@@ -12,14 +12,27 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('VolleyBill')
 
-    response = table.query(
+    payments_response = table.query(
         KeyConditionExpression='PK = :pk AND begins_with(SK, :sk)',
         ExpressionAttributeValues={
             ":pk": f"league#{gameData['league']}_season#{gameData['season']}",
             ":sk": "stats_payer#"
         }
     )
-    results = json.dumps(response['Items'], cls=DecimalEncoder)
+    dates_response = table.query(
+        KeyConditionExpression='PK = :pk AND begins_with(SK, :sk)',
+        ExpressionAttributeValues={
+            ":pk": f"league#{gameData['league']}_season#{gameData['season']}",
+            ":sk": "dates_player#"
+        }
+    )
+
+    response = {
+        'payments': payments_response['Items'],
+        'dates': dates_response['Items']
+    }
+
+    results = json.dumps(response, cls=DecimalEncoder)
 
     return {
         "statusCode": 200,
