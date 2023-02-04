@@ -1,10 +1,12 @@
 import boto3
 import json 
 from decimal import Decimal
+from collections import defaultdict
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Decimal): return float(obj)
+        if isinstance(obj, set): return list(obj)
 
 def lambda_handler(event, context):
     gameData = event['queryStringParameters']
@@ -27,25 +29,19 @@ def lambda_handler(event, context):
         }
     )
 
-    # Combine the data responses
-    from collections import defaultdict
 
-    # Using defaultdict
+
+    # Combine the data responses
     temp = defaultdict(list) 
     
-    # Using extend
-    for elem in payments_response['Items']:
-        temp[elem['Payer']] = elem
     
     for elem in dates_response['Items']:
-        temp[elem['Player']] = elem.update(temp[elem['Player']])
+        temp[elem['Player']] = elem
+    for elem in payments_response['Items']:
+        temp[elem['Payer']].update(elem)
     
-    #Output = [{"roll_no":y, "school_id":x} for x, y in temp.items()]
+
     response = temp
-    # response = {
-    #     'payments': payments_response['Items'],
-    #     'dates': dates_response['Items']
-    # }
 
     results = json.dumps(response, cls=DecimalEncoder)
 
