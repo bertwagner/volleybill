@@ -53,13 +53,6 @@ def lambda_handler(event, context):
         otherTeamId=1 if teamId==0 else 0
 
         for player in team:
-            # table.put_item(
-            #     Item={
-            #         'PK': f"player#{player}",
-            #         'SK': f"league#{gameData['League']}_season#{gameData['Season']}",
-            #         'InsertDate': insertDate
-            #     }
-            # )
             table.put_item(
                 Item={
                     'PK': f"league#{gameData['League']}_season#{gameData['Season']}_date#{gameData['Date']}_game#{insertDate}",
@@ -90,13 +83,19 @@ def lambda_handler(event, context):
                     ':ud': insertDate
                 }
             )
-
-    # table.put_item(
-    #     Item={
-    #         'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
-    #         'SK': f"game#{insertDate}"
-    #     }
-    # )
+            table.update_item(
+                Key={
+                    'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
+                    'SK': f"dates_player#{player}"
+                },
+                UpdateExpression='ADD PlayDates :d SET Player = :p, UpdateDate = :ud',
+                ExpressionAttributeValues={
+                    ':p': player,
+                    ':d': set([gameData['Date']]),
+                    ':ud': insertDate
+                }
+            )
+            
 
     return {
         "statusCode": 200,
