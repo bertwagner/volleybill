@@ -4,18 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>VolleyBill</title>
   <link rel="stylesheet" href="css/tabler.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-
-    .input-group .input-group-text {
-      width: 100%;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -121,45 +114,24 @@
           <div class="row g-2 align-items-center">
             <div class="col">
               <h2 class="page-title">
-                Login
+                Wisdom
               </h2>
             </div>
           </div>
         </div>
       </div>
+      <!-- Page body -->
       <div class="page-body">
-        <div class="container-xl">
-          <div class="row row-cards">
-            <form id="loginForm">
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="Email">Email</label>
-                  <input type="email" class="form-control" name="Email" id="Email" aria-describedby="Email">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="Password">Password</label>
-                  <input type="password" class="form-control" name="Password" id="Password" aria-describedby="Password">
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <div class="col">
-                  <button type="button" class="btn btn-primary" id="login">Login</button><img src="loading.gif" class="hidden" id="loadingImage" />
-                </div>
-              </div>
-            </form>
-            <div id="success" class="hidden">You have successfully been logged in.</div>
+        <div class="container-xl d-flex flex-column justify-content-center">
+            <p class="empty-title text-muted col-12" style="font-size:72px; line-height:normal"><em id="quote"></em></p>
           </div>
         </div>
       </div>
+
     </div>
   </div>
   <script src="scripts/tabler.min.js"></script>
-  <script src="scripts/ajax.min.js"></script>
-  <script src="scripts/dragdroptouch.js"></script>
-  <script src="scripts/login.js"></script>
+  <script src="scripts/wisdom.js"></script>
 </body>
 
 </html>
