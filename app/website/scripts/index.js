@@ -56,16 +56,41 @@ fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
         data[i]['GameWinPercentage'] = (data[i].GamesWon)/(data[i].TotalGamesPlayed);
     }
 
+
+    // Custom sort - if more than 10 games played, sort on percentage, otherwise sort on game wins
+    sort1=[]
+    sort2=[]
+
+    for (var i=0; i< data.length; i++){
+        if (parseInt(data[i]['GamesWon'])+parseInt(data[i]['GamesLost']) > 10) {
+            sort1.push(data[i])
+        } else {
+            sort2.push(data[i])
+        }
+    }
+
     // Sort
-    data.sort(function(a,b){
-        if (a.GamesWon < b.GamesWon) {
+    sort1.sort(function(a,b){
+        if (a.GameWinPercentage < b.GameWinPercentage) {
             return 1;
         }
-        if (a.GamesWon > b.GamesWon) {
+        if (a.GameWinPercentage > b.GameWinPercentage) {
             return -1;
         } 
         return 0;
     });
+    sort2.sort(function(a,b){
+        if (parseInt(a.GamesWon) < parseInt(b.GamesWon)) {
+            return 1;
+        }
+        if (parseInt(a.GamesWon) > parseInt(b.GamesWon)) {
+            return -1;
+        } 
+        return 0;
+    });
+
+    // Combine
+    data = sort1.concat(sort2)
 
     table = document.getElementById("statsBody")
     for (var i = 0; i < data.length; i++) {
