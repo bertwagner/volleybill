@@ -68,10 +68,10 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
 
     // Sort
     computed_data.sort(function(a,b){
-        if (a.Credit < b.Credit) {
+        if (parseInt(a.Credit) < parseInt(b.Credit)) {
             return -1;
         }
-        if (a.Credit > b.Credit) {
+        if (parseInt(a.Credit) > parseInt(b.Credit)) {
             return 1;
         } 
         return 0;
