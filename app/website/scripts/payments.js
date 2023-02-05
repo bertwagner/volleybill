@@ -51,37 +51,66 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
 })
 .then((data) => {
     
-    console.log(data)
+
+
+
+    table = document.getElementById("statsBody")
+    computed_data = []
+
+    for (var [key,item] of Object.entries(data['players'])) {
+        row = {}
+        row['Player'] = item['Player']
+        row['AmountPaid'] = (item['AmountPaid'] == undefined ? 0 : item['AmountPaid'])
+        row['DaysPlayed'] = item['PlayDates'].length
+        row['Credit'] = ((item['AmountPaid'] == undefined ? 0 : item['AmountPaid']) - (data['avg_cost_per_game']*item['PlayDates'].length)).toFixed(2);
+        computed_data.push(row);
+    }
+
     // Sort
-    data.sort(function(a,b){
-        if (a.AmountPaid < b.AmountPaid) {
-            return 1;
-        }
-        if (a.AmountPaid > b.AmountPaid) {
+    computed_data.sort(function(a,b){
+        if (a.Credit < b.Credit) {
             return -1;
+        }
+        if (a.Credit > b.Credit) {
+            return 1;
         } 
         return 0;
     });
 
-    
-
-    table = document.getElementById("statsBody")
-    for (var i = 0; i < data.length; i++) {
+    computed_data.forEach(function (item, index) {
         var row = document.createElement("tr");
 
         var tdPlayer= document.createElement("td")
-        tdPlayer.innerHTML= data[i]['Payer']
+        tdPlayer.innerHTML= item['Player']
         row.appendChild(tdPlayer)
 
         var tdGamesWon= document.createElement("td")
-        tdGamesWon.innerHTML= data[i]['AmountPaid']
+        tdGamesWon.innerHTML= item['AmountPaid']
         tdGamesWon.classList.add("text-muted")
         row.appendChild(tdGamesWon)
 
+        var tdDaysPlayed = document.createElement("td")
+        tdDaysPlayed.innerHTML = item['DaysPlayed']
+        row.appendChild(tdDaysPlayed)
+
+        var tdBalance = document.createElement("td")
+        tdBalance.innerHTML = item['Credit'];
+        if (item['Credit'] >= 0) {
+            tdBalance.style.color='green'
+        }
+        else {
+            tdBalance.style.color='red'
+        }
+        row.appendChild(tdBalance)
+
         table.appendChild(row);
-    }
+    });
+
+
+    document.getElementById("costPerGame").innerHTML = "Current cost per game: $" + data['avg_cost_per_game'].toFixed(2)
     document.getElementById("loadingImage").classList.add("hidden");
     document.getElementById("statsTable").classList.remove("hidden");
 });
 
 
+// TODO: add sorting, add defaults for undefined, calculate amount owed, cookies expiration

@@ -32,16 +32,26 @@ def lambda_handler(event, context):
 
 
     # Combine the data responses
-    temp = defaultdict(list) 
-    
+    results = defaultdict(list) 
+    players_on_date = defaultdict(list)
     
     for elem in dates_response['Items']:
-        temp[elem['Player']] = elem
+        results[elem['Player']] = elem
+        for date in elem['PlayDates']:
+            players_on_date[date].append(elem['Player'])
     for elem in payments_response['Items']:
-        temp[elem['Payer']].update(elem)
+        results[elem['Payer']].update(elem)
     
+    dates_played = len(players_on_date.keys())
+    cost_per_game = 30.0
+    total_cost = dates_played*cost_per_game
+    total_players_played = sum([len(date) for date in players_on_date.values()])
+    avg_cost_per_game = total_cost / (total_players_played * 1.0)
 
-    response = temp
+    response = {
+        'players': results,
+        'avg_cost_per_game': avg_cost_per_game
+    }
 
     results = json.dumps(response, cls=DecimalEncoder)
 
