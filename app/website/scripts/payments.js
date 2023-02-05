@@ -112,5 +112,3 @@ fetch('https://api.volleybill.com/get-payment-stats?league=1&season=3', {
     document.getElementById("statsTable").classList.remove("hidden");
 });
 
-
-// TODO: add sorting, add defaults for undefined, calculate amount owed, cookies expiration

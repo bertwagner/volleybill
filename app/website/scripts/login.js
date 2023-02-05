@@ -63,9 +63,12 @@ window.addEventListener('click', function (e) {
 
             })
             .then((data) => {
+                // 30 days
+                var cookie_expiration=(24*60*60*30)*1000;
+
                 //success.
-                document.cookie = "AccessToken=" + data.AuthenticationResult.AccessToken + "; path=/; SameSite=Strict";
-                document.cookie = "RefreshToken=" + data.AuthenticationResult.RefreshToken + "; path=/; SameSite=Strict";
+                document.cookie = "AccessToken=" + data.AuthenticationResult.AccessToken + "; path=/; max-age="+cookie_expiration+"; SameSite=Strict";
+                document.cookie = "RefreshToken=" + data.AuthenticationResult.RefreshToken + "; path=/;  max-age="+cookie_expiration+"; SameSite=Strict";
                 
 
                 //hide form and display success
