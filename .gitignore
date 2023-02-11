@@ -1,6 +1,7 @@
 .terraform*
 *.zip
 package*
+.vscode
 
 # Don't allow committing data files
 /ml/data/raw/*
