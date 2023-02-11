@@ -73,13 +73,14 @@ def lambda_handler(event, context):
                     'PK': f"league#{gameData['League']}_season#{gameData['Season']}",
                     'SK': f"stats_player#{player}"
                 },
-                UpdateExpression='SET Player = :p, GamesWon = if_not_exists(GamesWon,:z) + :gw, GamesLost = if_not_exists(GamesLost,:z) + :gl, TotalGamesPlayed = if_not_exists(TotalGamesPlayed,:z) + :tgp, UpdateDate = :ud',
+                UpdateExpression='SET Player = :p, GamesWon = if_not_exists(GamesWon,:z) + :gw, GamesLost = if_not_exists(GamesLost,:z) + :gl, TotalGamesPlayed = if_not_exists(TotalGamesPlayed,:z) + :tgp, TotalPointDifferential = if_not_exists(TotalPointDifferential,:z) + :pd, UpdateDate = :ud',
                 ExpressionAttributeValues={
                     ':p': player,
                     ':z': 0,
                     ':gw': int(playerStats[player]['GamesWon']),
                     ':gl': int(playerStats[player]['GamesLost']),
                     ':tgp': 1,
+                    ':pd': int(gameData['Scores'][teamId]) - int(gameData['Scores'][otherTeamId]),
                     ':ud': insertDate
                 }
             )
