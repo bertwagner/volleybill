@@ -6,18 +6,18 @@ website:
 
 # Upload application code for lambda functions
 lambdas:
-	zip -rj app/lambda/insert_game.zip app/lambda/insert_game
+	(cd app/lambda/insert_game && 7z a -tzip ../insert_game.zip *)
 	aws s3 cp app/lambda/insert_game.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-insert-game --s3-bucket volleybill.com-lambda-functions --s3-key insert_game.zip > /dev/null
 	
-	zip -rj app/lambda/get_player_stats.zip app/lambda/get_player_stats
+	(cd app/lambda/get_player_stats && 7z a -tzip ../get_player_stats.zip *)
 	aws s3 cp app/lambda/get_player_stats.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-get-player-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_player_stats.zip > /dev/null
 
-	zip -rj app/lambda/insert_payment.zip app/lambda/insert_payment
+	(cd app/lambda/insert_payment && 7z a -tzip ../insert_payment.zip *)
 	aws s3 cp app/lambda/insert_payment.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-insert-payment --s3-bucket volleybill.com-lambda-functions --s3-key insert_payment.zip > /dev/null
 
-	zip -rj app/lambda/get_payment_stats.zip app/lambda/get_payment_stats
+	(cd app/lambda/get_payment_stats && 7z a -tzip ../get_payment_stats.zip *)
 	aws s3 cp app/lambda/get_payment_stats.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-get-payment-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_payment_stats.zip > /dev/null
