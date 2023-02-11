@@ -1,3 +1,11 @@
 .terraform*
 *.zip
 package*
+
+# Don't allow committing data files
+/ml/data/raw/*
+/ml/data/processed/*
+
+# ...but do allow .gitkeep files
+!/ml/data/raw/.gitkeep
+!/ml/data/processed/.gitkeep
