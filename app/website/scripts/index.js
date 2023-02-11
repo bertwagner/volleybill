@@ -115,6 +115,16 @@ fetch('https://api.volleybill.com/get-player-stats?league=1&season=3', {
         tdGamesWinPercentage.classList.add("text-muted")
         row.appendChild(tdGamesWinPercentage)
 
+        var tdTotPointDiff= document.createElement("td")
+        tdTotPointDiff.innerHTML= data[i]['TotalPointDifferential']
+        tdTotPointDiff.classList.add("text-muted")
+        row.appendChild(tdTotPointDiff)
+
+        var tdAvgPointDiff= document.createElement("td")
+        tdAvgPointDiff.innerHTML= ((data[i]['TotalPointDifferential']/data[i]['TotalGamesPlayed'])).toFixed(2)
+        tdAvgPointDiff.classList.add("text-muted")
+        row.appendChild(tdAvgPointDiff)
+
         table.appendChild(row);
     }
     document.getElementById("loadingImage").classList.add("hidden");
