@@ -93,7 +93,11 @@ var quotes = [
     "Make Keith great again.",
     "This is what I do!",
     "*cackle* *cackle* *cackle*",
-    "It sure is lonely at the top..."
+    "It sure is lonely at the top...",
+    "He touched the net!!!",
+    "I guess we're counting shadows now.",
+    "Are you kidding me???"
+
 ];
 
 Array.prototype.random = function () {
