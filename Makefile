@@ -21,3 +21,6 @@ lambdas:
 	(cd app/lambda/get_payment_stats && 7z a -tzip ../get_payment_stats.zip *)
 	aws s3 cp app/lambda/get_payment_stats.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-get-payment-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_payment_stats.zip > /dev/null
+
+video_data:
+	ffmpeg -i ml/data/raw/GP050269.MP4 -ss 00:00:00.0 -t 00:00:7.0 -vf "lenscorrection=cx=0.5:cy=0.5:k1=-0.255:k2=-0.022" ml/data/processed/GP050269_undistorted_10s.mp4

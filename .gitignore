@@ -10,3 +10,4 @@ package*
 
 # ...but do allow .gitkeep files
 !/**/.gitkeep
+!/**/output.avi
