@@ -10,4 +10,4 @@ package*
 
 # ...but do allow .gitkeep files
 !/**/.gitkeep
-!/**/output2.mp4
+!/**/*compressed.mp4
