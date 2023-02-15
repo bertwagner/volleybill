@@ -22,5 +22,9 @@ lambdas:
 	aws s3 cp app/lambda/get_payment_stats.zip s3://volleybill.com-lambda-functions
 	aws lambda update-function-code --function-name volleybill-get-payment-stats --s3-bucket volleybill.com-lambda-functions --s3-key get_payment_stats.zip > /dev/null
 
+filter_coco_images:
+	# python ml/src/data/filter_coco_images.py "models/coco2017-full/annotations/train_filtered.json" "models/coco2017-full/train" "models/coco2017-partial/train"
+	python ml/src/data/filter_coco_images.py "models/coco2017-full/annotations/val_filtered.json" "models/coco2017-full/val" "models/coco2017-partial/val"
+
 video_data:
 	ffmpeg -i ml/data/raw/GP050269.MP4 -ss 00:00:00.0 -t 00:00:7.0 -vf "lenscorrection=cx=0.5:cy=0.5:k1=-0.255:k2=-0.022" ml/data/processed/GP050269_undistorted_10s.mp4
