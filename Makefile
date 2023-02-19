@@ -28,3 +28,7 @@ filter_coco_images:
 
 video_data:
 	ffmpeg -i ml/data/raw/GP050269.MP4 -ss 00:00:00.0 -t 00:00:7.0 -vf "lenscorrection=cx=0.5:cy=0.5:k1=-0.255:k2=-0.022" ml/data/processed/GP050269_undistorted_10s.mp4
+
+upload_video_results:
+	aws s3 cp ml/data/processed/output-val_compressed.mp4 s3://volleybill.com/content/output.mp4
+	
