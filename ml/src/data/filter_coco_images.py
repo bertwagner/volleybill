@@ -12,7 +12,8 @@ from tqdm import tqdm
 @click.argument('filtered_json_filepath')
 @click.argument('source_filepath')
 @click.argument('output_filepath')
-def main(filtered_json_filepath, source_filepath, output_filepath):
+@click.argument('number_of_images')
+def main(filtered_json_filepath, source_filepath, output_filepath,number_of_images):
     """ Uses a filtered.json file (generated with https://github.com/immersive-limit/coco-manager) to copy
         a subset of training and validation images from the full coco dataset
         python filter.py --input_json coco2017-full\annotations\instances_train2017.json --output_json coco2017-full\annotations\train_filtered.json --categories person
@@ -27,6 +28,12 @@ def main(filtered_json_filepath, source_filepath, output_filepath):
         data=f.read()
     raw_json = json.loads(data)
     filtered_images = raw_json['images']
+    if number_of_images == None:
+        number_of_images = -1
+    if int(number_of_images)==-1:
+        pass
+    else:
+        filtered_images = filtered_images[:int(number_of_images)]
     filtered_annotations = raw_json['annotations']
 
     for image in tqdm(filtered_images):
@@ -41,16 +48,19 @@ def main(filtered_json_filepath, source_filepath, output_filepath):
         width = a['bbox'][2]
         height = a['bbox'][3]
         filename=str(image_id).rjust(12,'0')
-        image_lookup = list(filter(lambda image: image['file_name'].split('.')[0] == filename, filtered_images))[0]
-        image_width = image_lookup['width']
-        image_height = image_lookup['height']
+        try:
+            image_lookup = list(filter(lambda image: image['file_name'].split('.')[0] == filename, filtered_images))[0]
+            image_width = image_lookup['width']
+            image_height = image_lookup['height']
 
-        nx,ny,nw,nh = _normalize_xywh(x,y,width,height,image_width,image_height)
+            nx,ny,nw,nh = _normalize_xywh(x,y,width,height,image_width,image_height)
 
-        # write out to text file
-        dest_path = os.path.join(project_dir,output_filepath,"labels",filename+".txt")
-        with open(dest_path, "a+") as myfile:
-            myfile.write(f"\n0 {nx} {ny} {nw} {nh}")
+            # write out to text file
+            dest_path = os.path.join(project_dir,output_filepath,"labels",filename+".txt")
+            with open(dest_path, "a+") as myfile:
+                myfile.write(f"\n0 {nx} {ny} {nw} {nh}")
+        except:
+            continue
 
 def _normalize_xywh(x,y,w,h,image_w,image_h):
     x_center = w/2.0 + x
@@ -70,6 +80,6 @@ if __name__ == '__main__':
     # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
 
-    #main(["models/coco2017-full/annotations/train_filtered.json","models/coco2017-full/train","models/coco2017-partial/train"])
-    #main(["models/coco2017-full/annotations/val_filtered.json","models/coco2017-full/val","models/coco2017-partial/val"])
+    #main(["models/coco2017-full/annotations/train_filtered.json","models/coco2017-full/train","models/coco2017-2000/train","2000"])
+    #main(["models/coco2017-full/annotations/val_filtered.json","models/coco2017-full/val","models/coco2017-2000/val", "200"])
     main()

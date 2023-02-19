@@ -32,7 +32,6 @@ def main(input_video_filepath, output_image_folderpath, number_of_images_to_gene
     rate=total_frames/int(number_of_images_to_generate)
 
     while success:
-
         if (image_counter % int(rate)) == 0 or int(number_of_images_to_generate) == -1:
             color_image = image 
             resized = _resize_image(color_image,max_width=640,max_height=640)
@@ -62,5 +61,5 @@ if __name__ == '__main__':
     # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
 
-    main(["data/processed/GP050269_undistored_60s.MP4","data/processed/frames-200","800"])
+    main(["data/processed/GP020269-labelling.mp4","data/processed/frames-180","180"])
     #main()
