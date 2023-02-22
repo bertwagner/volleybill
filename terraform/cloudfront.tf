@@ -10,6 +10,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   aliases = ["${var.domain}", "www.${var.domain}"]
 
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.cloudfront_logs.bucket_regional_domain_name
+  }
+
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]

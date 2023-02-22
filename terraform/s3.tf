@@ -77,3 +77,15 @@ resource "aws_s3_bucket_acl" "lambda_bfunctions_acl" {
   acl = "private"
 
 }
+
+
+# Lambda source code
+resource "aws_s3_bucket" "cloudfront_logs" {
+  bucket = "${var.domain}-cloudfront-logs"
+}
+
+resource "aws_s3_bucket_acl" "cloudfront_logs_acl" {
+  bucket = aws_s3_bucket.cloudfront_logs.id
+  acl = "private"
+
+}
